@@ -11,8 +11,6 @@ type Emotion = keyof Omit<FaceExpressions, 'asSortedArray'>;
 const emotions: Emotion[] = ['angry', 'disgusted', 'fearful', 'happy', 'neutral', 'sad', 'surprised'];
 
 const randomEmotion: Emotion = emotions[Math.floor(Math.random() * emotions.length)];
-console.log(emotions);
-console.log(FaceExpressions);
 export const EmotionContext = createContext<{
   emotion: Emotion,
   setEmotion: (emotionProvider: Emotion) => void,
