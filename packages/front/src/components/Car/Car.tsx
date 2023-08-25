@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { BufferGeometry, Material } from 'three';
+import { GLTF } from 'three-stdlib';
 import { useGLTF } from '@react-three/drei';
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 interface GLTFResult extends GLTF {
   nodes: {
@@ -34,8 +34,6 @@ interface CarProps {
 const Car: FC<CarProps> = ({ carPosition }) => {
   const { nodes, materials } = useGLTF('/car.glb') as GLTFResult;
 
-  console.log(materials);
-  
   return (
     <group
       dispose={null}
