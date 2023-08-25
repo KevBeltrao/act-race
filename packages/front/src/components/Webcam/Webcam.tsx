@@ -1,6 +1,7 @@
 import { useRef, type FC, useState, useEffect, useContext } from 'react';
 import * as faceapi from 'face-api.js';
 import { ExpressionsContext } from '../../providers/ExpressionsProvider';
+import { expressionsInitialValue } from '../../constants';
 
 
 const Webcam: FC = () => {
@@ -52,9 +53,7 @@ const Webcam: FC = () => {
 
         const { expressions } = detections?.[0] || {};
 
-        if (!expressions) return;
-
-        setExpressions(expressions);
+        setExpressions(expressions ?? expressionsInitialValue);
     }, 100)
   }
 

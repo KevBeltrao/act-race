@@ -5,28 +5,18 @@ import {
   type FC,
 } from 'react';
 import { FaceExpressions } from 'face-api.js';
-
-const INITIAL_VALUE: FaceExpressions = {
-  angry: 0,
-  disgusted: 0,
-  fearful: 0,
-  happy: 0,
-  neutral: 0,
-  sad: 0,
-  surprised: 0,
-  asSortedArray: () => [],
-};
+import { expressionsInitialValue } from '../../constants';
 
 export const ExpressionsContext = createContext<{
   expressions: FaceExpressions,
   setExpressions: (expressions: FaceExpressions) => void,
 }>({
-  expressions: INITIAL_VALUE,
+  expressions: expressionsInitialValue,
   setExpressions: () => {},
 });
 
 const ExpressionsProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [expressions, setExpressions] = useState(INITIAL_VALUE);
+  const [expressions, setExpressions] = useState(expressionsInitialValue);
 
   return (
     <ExpressionsContext.Provider value={{ expressions, setExpressions }}>
