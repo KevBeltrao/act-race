@@ -1,5 +1,5 @@
 import { type FC, useEffect, useContext } from 'react';
-import { EmotionContext } from '../../providers/EmotionProvider';
+import { EmotionContext } from '../../../../providers/EmotionProvider';
 
 const emotions = {
   neutral: '😐',

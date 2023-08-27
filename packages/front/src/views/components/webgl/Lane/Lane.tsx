@@ -12,7 +12,7 @@ const Lane: FC = () => {
   colorMap.repeat.set(1, length / 5);
 
   return (
-    <mesh position={[0, length / 2 - 2, 0]}>
+    <mesh receiveShadow position={[0, length / 2 - 2, 0]}>
       <planeGeometry args={[2, length]} />
       <meshStandardMaterial map={colorMap} />
     </mesh>

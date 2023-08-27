@@ -37,9 +37,11 @@ const Car: FC<CarProps> = ({ carPosition }) => {
   return (
     <group
       dispose={null}
-      position={[0, carPosition, 0.5]}
+      position={[0, carPosition, 0]}
       rotation={[0, Math.PI / 2, Math.PI / 2]}
       scale={0.2}
+      castShadow
+      receiveShadow
     >
       <mesh
         castShadow

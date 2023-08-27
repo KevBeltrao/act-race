@@ -2,14 +2,17 @@ import { type PropsWithChildren, type FC } from 'react';
 import CarPositionProvider from './CarPositionProvider';
 import ExpressionsProvider from './ExpressionsProvider';
 import EmotionProvider from './EmotionProvider';
+import OpponentsPositionProvider from './OpponentsPositionProvider';
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
     <ExpressionsProvider>
       <CarPositionProvider>
-        <EmotionProvider>
-          {children}
-        </EmotionProvider>
+        <OpponentsPositionProvider>
+          <EmotionProvider>
+            {children}
+          </EmotionProvider>
+        </OpponentsPositionProvider>
       </CarPositionProvider>
     </ExpressionsProvider>
   );

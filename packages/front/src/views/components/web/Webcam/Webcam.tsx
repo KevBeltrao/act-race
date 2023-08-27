@@ -1,7 +1,7 @@
 import { useRef, type FC, useState, useEffect, useContext } from 'react';
 import * as faceapi from 'face-api.js';
-import { ExpressionsContext } from '../../providers/ExpressionsProvider';
-import { expressionsInitialValue } from '../../constants';
+import { ExpressionsContext } from '../../../../providers/ExpressionsProvider';
+import { expressionsInitialValue } from '../../../../constants';
 
 
 const Webcam: FC = () => {
@@ -46,14 +46,15 @@ const Webcam: FC = () => {
   const handleVideoOnPlay = () => {
     setInterval(async () => {
       if (!videoRef.current) return;
-        const detections = await faceapi
-          .detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceExpressions();
 
-        const { expressions } = detections?.[0] || {};
+      const detections = await faceapi
+        .detectAllFaces(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceExpressions();
 
-        setExpressions(expressions ?? expressionsInitialValue);
+      const { expressions } = detections?.[0] || {};
+
+      setExpressions(expressions ?? expressionsInitialValue);
     }, 100)
   }
 
@@ -63,6 +64,7 @@ const Webcam: FC = () => {
     if (!videoRef.current.srcObject) return;
     (videoRef.current.srcObject as MediaStream).getTracks().forEach(stream => stream.stop());
     setCaptureVideo(false);
+    setExpressions(expressionsInitialValue);
   };
 
   return (
@@ -96,5 +98,5 @@ const Webcam: FC = () => {
     </div>
   );
 }
- 
+
 export default Webcam;

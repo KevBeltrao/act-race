@@ -45,4 +45,50 @@ export class LobbyRepository {
       throw new BadRequestException('Something went wrong', { cause: error });
     }
   }
+
+  async addUserToLobby(
+    code: string,
+    userId: string,
+    userName: string,
+  ): Promise<Lobby> {
+    try {
+      const lobby = await this.lobbyModel.findOneAndUpdate(
+        { code },
+        {
+          $push: {
+            users: {
+              id: userId,
+              name: userName,
+            },
+          },
+        },
+        { new: true },
+      );
+      return lobby;
+    } catch (error) {
+      throw new BadRequestException('Something went wrong', { cause: error });
+    }
+  }
+
+  async removeUserFromLobby(code: string, userId: string): Promise<Lobby> {
+    try {
+      const lobby = await this.lobbyModel.findOneAndUpdate(
+        { code },
+        { $pull: { users: { id: userId } } },
+        { new: true },
+      );
+      return lobby;
+    } catch (error) {
+      throw new BadRequestException('Something went wrong', { cause: error });
+    }
+  }
+
+  async findLobbyByUserId(userId: string): Promise<Lobby> {
+    try {
+      const lobby = await this.lobbyModel.findOne({ 'users.id': userId });
+      return lobby;
+    } catch (error) {
+      throw new BadRequestException('Something went wrong', { cause: error });
+    }
+  }
 }
