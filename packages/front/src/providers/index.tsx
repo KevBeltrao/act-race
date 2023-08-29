@@ -3,6 +3,7 @@ import CarPositionProvider from './CarPositionProvider';
 import ExpressionsProvider from './ExpressionsProvider';
 import EmotionProvider from './EmotionProvider';
 import OpponentsPositionProvider from './OpponentsPositionProvider';
+import OpponentsWebcamProvider from './PlayerWebcamProvider';
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -10,7 +11,9 @@ const Providers: FC<PropsWithChildren> = ({ children }) => {
       <CarPositionProvider>
         <OpponentsPositionProvider>
           <EmotionProvider>
-            {children}
+            <OpponentsWebcamProvider>
+              {children}
+            </OpponentsWebcamProvider>
           </EmotionProvider>
         </OpponentsPositionProvider>
       </CarPositionProvider>

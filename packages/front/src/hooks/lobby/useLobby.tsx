@@ -53,7 +53,7 @@ const useLobby = (
   useEffect(() => {
     if (!socket) return;
 
-    socket.on('updatePosition', (payload: { userId: string; position: number}) => {
+    socket.on('updatePosition', (payload: { userId: string; position: number; videoSrc: string; }) => {
       const opponentIndex = opponentsPosition.findIndex((opponent) => opponent.id === payload.userId);
 
       if (opponentIndex === -1) return;
@@ -63,6 +63,7 @@ const useLobby = (
           return {
             ...opponent,
             position: payload.position,
+            videoSrc: payload.videoSrc,
           }
         }
         return opponent;
@@ -78,12 +79,13 @@ const useLobby = (
     socket.emit('startGame', { lobby });
   }, [socket, lobby]);
 
-  const updatePosition = useCallback((position: number) => {
+  const updatePosition = useCallback((position: number, videoSrc: string) => {
     if (!socket) return;
 
     socket?.emit('updatePosition', {
       lobby,
       position,
+      videoSrc,
     })
   }, [socket, lobby]);
   

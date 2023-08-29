@@ -25,6 +25,7 @@ const Lobby: FC = () => {
         .map((player) => ({
         ...player,
         position: 0,
+        videoSrc: '',
       }));
 
       setOpponentsPosition(playersZeroed);

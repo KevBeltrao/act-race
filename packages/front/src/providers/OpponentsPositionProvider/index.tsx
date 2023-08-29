@@ -9,6 +9,7 @@ export interface OpponentPosition {
   name: string;
   position: number;
   id: string;
+  videoSrc: string;
 }
 
 export const OpponentsPositionContext = createContext<{

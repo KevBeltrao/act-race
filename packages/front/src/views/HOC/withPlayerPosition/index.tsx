@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { CarPositionContext } from '../../../providers/CarPositionProvider';
 import { ExpressionsContext } from '../../../providers/ExpressionsProvider';
 import { EmotionContext } from '../../../providers/EmotionProvider';
+import { PlayersWebcamContext } from '../../../providers/PlayerWebcamProvider';
 
 interface Props {
   player: {
@@ -16,6 +17,7 @@ interface Props {
 
 const withPlayerPosition = (Child: ComponentType<Props>) => ({ index }: Pick<Props, 'index'>) => {
   const { carPosition, setCarPosition } = useContext(CarPositionContext);
+  const { playerWebcam } = useContext(PlayersWebcamContext);
   const { expressions } = useContext(ExpressionsContext);
   const { emotion } = useContext(EmotionContext);
   const time = useRef(Date.now());
@@ -33,7 +35,8 @@ const withPlayerPosition = (Child: ComponentType<Props>) => ({ index }: Pick<Pro
   const now = Date.now();
   if (now - time.current > 50) {
     time.current = now;
-    carPosition.updatePosition(newPosition);
+
+    carPosition.updatePosition(newPosition, playerWebcam.videoSrc);
   }
 });
   

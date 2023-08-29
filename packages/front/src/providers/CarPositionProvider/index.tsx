@@ -10,7 +10,7 @@ export interface CarPosition {
   name: string;
   position: number;
   lanePosition: number;
-  updatePosition: (position: number) => void;
+  updatePosition: (position: number, videoSrc: string) => void;
 }
 
 export const CarPositionContext = createContext<{

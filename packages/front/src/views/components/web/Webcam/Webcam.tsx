@@ -2,12 +2,14 @@ import { useRef, type FC, useState, useEffect, useContext } from 'react';
 import * as faceapi from 'face-api.js';
 import { ExpressionsContext } from '../../../../providers/ExpressionsProvider';
 import { expressionsInitialValue } from '../../../../constants';
+import { PlayersWebcamContext } from '../../../../providers/PlayerWebcamProvider';
 
 
 const Webcam: FC = () => {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [captureVideo, setCaptureVideo] = useState(false);
   const { setExpressions } = useContext(ExpressionsContext);
+  const { setPlayerWebcam } = useContext(PlayersWebcamContext);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoHeight = 480 / 2;
@@ -27,21 +29,22 @@ const Webcam: FC = () => {
     loadModels();
   }, []);
 
-  const startVideo = () => {
+  const startVideo = async () => {
     setCaptureVideo(true);
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 300 } })
-      .then(stream => {
-        const { current: video } = videoRef;
-        if (!video) return;
 
-        video.srcObject = stream;
-        video.play();
-      })
-      .catch(err => {
-        console.error('error:', err);
-      });
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 300 } })
+
+      const { current: video } = videoRef;
+      if (!video) return;
+
+      video.srcObject = stream;
+      video.play();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const handleVideoOnPlay = () => {
     setInterval(async () => {
@@ -55,7 +58,21 @@ const Webcam: FC = () => {
       const { expressions } = detections?.[0] || {};
 
       setExpressions(expressions ?? expressionsInitialValue);
-    }, 100)
+
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const canvasContext = canvas.getContext('2d')!;
+      canvasContext.drawImage(videoRef.current, 0, 0);
+
+      const image = canvas.toDataURL('image/png');
+
+      if (image) {
+        setPlayerWebcam({
+          videoSrc: image,
+        });
+      }
+    }, 50)
   }
 
   const closeWebcam = () => {

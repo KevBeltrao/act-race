@@ -37,11 +37,13 @@ export class LobbyGateway {
     payload: {
       lobby: Lobby;
       position: number;
+      videoSrc: string;
     },
   ): Promise<void> {
     this.server.in(payload.lobby.code).emit('updatePosition', {
       userId: client.id,
       position: payload.position,
+      videoSrc: payload.videoSrc,
     });
   }
 
