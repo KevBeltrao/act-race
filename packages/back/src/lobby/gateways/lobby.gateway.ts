@@ -13,7 +13,7 @@ const TEN_SECONDS = 10 * 1000;
   cors: {
     credentials: true,
     methods: ['GET', 'POST'],
-    origin: [process.env.CLIENT_URL],
+    origin: '*',
   },
 })
 export class LobbyGateway {
