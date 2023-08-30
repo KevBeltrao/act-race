@@ -6,6 +6,8 @@ import Routes from './Routes';
 import GlobalStyle from './styles';
 
 const App: FC = () => {
+  console.log('API_URL', import.meta.env.VITE_API_URL);
+
   return (
     <Providers>
       <Routes />
