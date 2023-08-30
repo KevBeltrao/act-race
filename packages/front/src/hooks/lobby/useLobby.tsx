@@ -8,7 +8,8 @@ import { OpponentsPositionContext } from '../../providers/OpponentsPositionProvi
 
 const useLobby = (
   lobby: Lobby | null,
-  setIsInGame: Dispatch<SetStateAction<boolean>>
+  setIsInGame: Dispatch<SetStateAction<boolean>>,
+  name: string,
 ) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [error, setError] = useState('');
@@ -26,7 +27,7 @@ const useLobby = (
 
     newSocket.emit('join', {
       lobby,
-      name: 'John Doe',
+      name,
     });
   
     newSocket.on('join', (payload: {
@@ -48,7 +49,7 @@ const useLobby = (
       newSocket.off('join');
       setSocket(null);
     }
-  }, [lobby, setIsInGame]);
+  }, [lobby, name, setIsInGame]);
 
   useEffect(() => {
     if (!socket) return;

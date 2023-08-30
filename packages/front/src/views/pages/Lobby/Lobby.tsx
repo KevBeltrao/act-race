@@ -7,14 +7,21 @@ import { OpponentsPositionContext } from '../../../providers/OpponentsPositionPr
 
 import Game from '../Game/Game';
 import { CarPositionContext } from '../../../providers/CarPositionProvider';
+import useQuery from '../../../hooks/useQuery';
+import InvitationButton from '../../components/web/InvitationButton/InvitationButton';
 
 const Lobby: FC = () => {
   const { code } = useParams<{ code: string }>();
   const [isInGame, setIsInGame] = useState(false);
   const { lobby, error: getLobbyError, isLoading } = useGetLobby(code!);
-  const { error: lobbyError, players, socket, startGame, updatePosition } = useLobby(lobby, setIsInGame);
+  const query = useQuery();
+
+  const name = query.get('name') || 'John Doe';
+
+  const { error: lobbyError, players, socket, startGame, updatePosition } = useLobby(lobby, setIsInGame, name);
   const { setOpponentsPosition } = useContext(OpponentsPositionContext);
   const { setCarPosition } = useContext(CarPositionContext);
+
 
   useEffect(() => {
     if (!socket) return;
@@ -31,13 +38,13 @@ const Lobby: FC = () => {
       setOpponentsPosition(playersZeroed);
       setCarPosition({
         id: socket!.id,
-        name: 'John doe',
+        name,
         position: 0,
         lanePosition: playersZeroed.length,
         updatePosition: updatePosition,
       })
     }
-  }, [isInGame, players, setCarPosition, setOpponentsPosition, socket, updatePosition]);
+  }, [isInGame, name, players, query, setCarPosition, setOpponentsPosition, socket, updatePosition]);
 
   if (isLoading) return <h1>Loading...</h1>;
   if (getLobbyError) return <h1>{getLobbyError}</h1>;
@@ -56,6 +63,8 @@ const Lobby: FC = () => {
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
+
+      <InvitationButton code={code!} />
 
       <button onClick={startGame}>Start game</button>
     </>

@@ -1,4 +1,4 @@
-import { useRef, type FC, useState, useEffect, useContext } from 'react';
+import { useRef, type FC, useState, useEffect, useContext, useCallback } from 'react';
 import * as faceapi from 'face-api.js';
 import { ExpressionsContext } from '../../../../providers/ExpressionsProvider';
 import { expressionsInitialValue } from '../../../../constants';
@@ -75,18 +75,24 @@ const Webcam: FC = () => {
     }, 50)
   }
 
-  const closeWebcam = () => {
+  const closeWebcam = useCallback(() => {
     if (!videoRef.current) return;
     videoRef.current.pause();
     if (!videoRef.current.srcObject) return;
     (videoRef.current.srcObject as MediaStream).getTracks().forEach(stream => stream.stop());
     setCaptureVideo(false);
     setExpressions(expressionsInitialValue);
-  };
+  }, [setExpressions]);
+
+  useEffect(() => {
+    startVideo();
+
+    return () => closeWebcam();
+  }, [closeWebcam]);
 
   return (
-    <div style={{ position: 'absolute', zIndex: 1, right: 0 }}>
-      <div style={{ textAlign: 'center', padding: '10px' }}>
+    <div>
+      {/* <div>
         {
           captureVideo && modelsLoaded ?
             <button onClick={closeWebcam} style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}>
@@ -97,7 +103,7 @@ const Webcam: FC = () => {
               Open Webcam
             </button>
         }
-      </div>
+      </div> */}
       {
         captureVideo ?
           modelsLoaded ?

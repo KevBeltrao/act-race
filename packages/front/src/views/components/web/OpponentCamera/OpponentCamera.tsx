@@ -9,6 +9,8 @@ const OpponentCamera: FC<OpponentCameraProps> = ({ opponentPosition }) => {
   const videoHeight = 480 / 2;
   const videoWidth = 640 / 2;
 
+  if (!opponentPosition.videoSrc) return null;
+
   return (
     <img src={opponentPosition.videoSrc} style={{
       height: videoHeight,

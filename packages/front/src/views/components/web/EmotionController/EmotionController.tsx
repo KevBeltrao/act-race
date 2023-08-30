@@ -1,5 +1,8 @@
 import { type FC, useEffect, useContext } from 'react';
+
 import { EmotionContext } from '../../../../providers/EmotionProvider';
+
+import { Container } from './styles';
 
 const emotions = {
   neutral: '😐',
@@ -33,9 +36,9 @@ const EmotionController: FC = () => {
   }, [emotion, setEmotion]);
 
   return (
-    <div style={{ position: 'absolute', zIndex: 1, fontSize: 24 }}>
+    <Container>
       {emotions[emotion]} {emotion}
-    </div>
+    </Container>
   );
 }
  

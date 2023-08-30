@@ -1,5 +1,4 @@
 import { useContext, type FC } from 'react';
-import { Canvas } from '@react-three/fiber';
 
 import { OpponentsPositionContext } from '../../../providers/OpponentsPositionProvider';
 
@@ -12,6 +11,9 @@ import withOpponentPosition from '../../HOC/withOpponentPosition';
 import withPlayerPosition from '../../HOC/withPlayerPosition';
 import OpponentCamera from '../../components/web/OpponentCamera/OpponentCamera';
 
+import { GameCanvas, WebcamsContainer } from './styles';
+import ScoreBoard from '../../components/web/ScoreBoard/ScoreBoard';
+
 const OpponentPlayer = withOpponentPosition(Player);
 
 const OriginalPlayer = withPlayerPosition(Player);
@@ -21,35 +23,25 @@ const Game: FC = () => {
 
   return (
     <>
-      <Webcam />
+      <WebcamsContainer>
+        <Webcam />
 
-      {opponentsPosition.map((player) => (
-        <OpponentCamera key={player.id} opponentPosition={player} />
-      ))}
-      <EmotionController />
-      {/* 
-      {opponentsPosition.slice(0, Math.floor(opponentsPosition.length / 2)).map((player) => (
-        <OpponentCamera key={player.id} opponentPosition={player} />
-        ))}
-        {opponentsPosition.slice(Math.floor(opponentsPosition.length / 2)).map((player) => (
+        {opponentsPosition.map((player) => (
           <OpponentCamera key={player.id} opponentPosition={player} />
-        ))} */}
+        ))}
+      </WebcamsContainer>
 
+      <EmotionController />
 
-      <Canvas shadows>
+      <ScoreBoard />
+
+      <GameCanvas shadows>
         <OriginalPlayer index={0} />
         {opponentsPosition.map((player, index) => (
           <OpponentPlayer key={player.id} player={player} index={index + 1} />
         ))}
-        {/* 
-        <OriginalPlayer index={Math.floor(opponentsPosition.length / 2)} />
-        
-        {opponentsPosition.slice(Math.floor(opponentsPosition.length / 2)).map((player, index) => (
-          <OpponentPlayer key={player.id} player={player} index={Math.floor(opponentsPosition.length / 2) + index + 1} />
-        ))} */}
-
         <SceneEnvironment />
-      </Canvas>
+      </GameCanvas>
     </>
   )
 };
