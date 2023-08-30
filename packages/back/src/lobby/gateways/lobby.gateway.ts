@@ -9,7 +9,7 @@ import { Lobby } from '../interfaces/lobby.interface';
 
 const TEN_SECONDS = 10 * 1000;
 
-@WebSocketGateway(3001, {
+@WebSocketGateway(0, {
   cors: {
     credentials: true,
     methods: ['GET', 'POST'],
