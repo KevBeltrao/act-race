@@ -7,7 +7,15 @@ import { Socket, Server } from 'socket.io';
 import { LobbyRepository } from '../lobby.repository';
 import { Lobby } from '../interfaces/lobby.interface';
 
-@WebSocketGateway(3001, { cors: '*' })
+const TEN_SECONDS = 10 * 1000;
+
+@WebSocketGateway(3001, {
+  cors: {
+    credentials: true,
+    methods: ['GET', 'POST'],
+    origin: [process.env.CLIENT_URL],
+  },
+})
 export class LobbyGateway {
   constructor(private readonly lobbyRepository: LobbyRepository) {}
   @WebSocketServer()
@@ -50,6 +58,26 @@ export class LobbyGateway {
   @SubscribeMessage('startGame')
   handleStartGame(client: Socket, payload: { lobby: Lobby }): void {
     this.server.in(payload.lobby.code).emit('startGame');
+
+    setInterval(() => {
+      const emotions = [
+        'neutral',
+        'happy',
+        'sad',
+        'angry',
+        'fearful',
+        'disgusted',
+        'surprised',
+      ] as const;
+
+      const randomEmotion = emotions[
+        Math.floor(Math.random() * emotions.length)
+      ] as (typeof emotions)[number];
+
+      this.server
+        .in(payload.lobby.code)
+        .emit('updateEmotion', { emotion: randomEmotion });
+    }, TEN_SECONDS);
   }
 
   @SubscribeMessage('join')

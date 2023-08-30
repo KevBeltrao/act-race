@@ -40,7 +40,7 @@ const Lobby: FC = () => {
         id: socket!.id,
         name,
         position: 0,
-        lanePosition: playersZeroed.length,
+        lanePosition: 0,
         updatePosition: updatePosition,
       })
     }

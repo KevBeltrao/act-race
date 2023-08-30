@@ -1,4 +1,4 @@
-import { type FC, useEffect, useContext } from 'react';
+import { type FC, useContext } from 'react';
 
 import { EmotionContext } from '../../../../providers/EmotionProvider';
 
@@ -12,28 +12,10 @@ const emotions = {
   fearful: '😱',
   disgusted: '🤮',
   surprised: '😮',
-};
+} as const;
 
 const EmotionController: FC = () => {
-  const { emotion, setEmotion } = useContext(EmotionContext);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const generateNewEmotion = () => {
-        const emotionsArray = Object.keys(emotions);
-  
-        const randomEmotion = emotionsArray[Math.floor(Math.random() * emotionsArray.length)] as keyof typeof emotions ;
-  
-        if (randomEmotion !== emotion) {
-          setEmotion(randomEmotion);
-        } else {
-          generateNewEmotion();
-        }
-      };
-
-      generateNewEmotion();
-    }, 10 * 1000);
-  }, [emotion, setEmotion]);
+  const { emotion } = useContext(EmotionContext);
 
   return (
     <Container>

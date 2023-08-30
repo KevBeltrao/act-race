@@ -2,9 +2,10 @@ import { useState, useEffect, Dispatch, SetStateAction, useCallback, useContext 
 import { Socket } from 'socket.io-client';
 
 import createWebsocket from '../../services/websocket';
+import { OpponentsPositionContext } from '../../providers/OpponentsPositionProvider';
+import { Emotion, EmotionContext } from '../../providers/EmotionProvider';
 
 import { Lobby } from '../types';
-import { OpponentsPositionContext } from '../../providers/OpponentsPositionProvider';
 
 const useLobby = (
   lobby: Lobby | null,
@@ -15,6 +16,8 @@ const useLobby = (
   const [error, setError] = useState('');
   const [players, setPlayers] = useState<Lobby['users']>(lobby?.users || []);
   const { opponentsPosition, setOpponentsPosition } = useContext(OpponentsPositionContext);
+  const { setEmotion } = useContext(EmotionContext);
+
   useEffect(() => {
     setError('')
     if (!lobby) return setError('Lobby not found');
@@ -42,6 +45,10 @@ const useLobby = (
       setIsInGame(true);
     });
 
+    newSocket.on('updateEmotion', (payload: { emotion: Emotion }) => {
+      setEmotion(payload.emotion);
+    });
+
     setSocket(newSocket);
 
     return () => {
@@ -49,7 +56,7 @@ const useLobby = (
       newSocket.off('join');
       setSocket(null);
     }
-  }, [lobby, name, setIsInGame]);
+  }, [lobby, name, setEmotion, setIsInGame]);
 
   useEffect(() => {
     if (!socket) return;
